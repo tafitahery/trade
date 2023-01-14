@@ -8,28 +8,21 @@ export default function StockList() {
   useEffect(() => {
     let isMounted = true;
     const fetchData = async () => {
-      let responses = [];
       try {
-        const response1 = await finnhub.get('/quote', {
-          params: {
-            symbol: 'GOOGLE',
-          },
+        const responses = await Promise.all(
+          watchList.map((stock) =>
+            finnhub.get('/quote', {
+              params: {
+                symbol: stock,
+              },
+            })
+          )
+        );
+        const data = responses.map((response) => {
+          return { data: response.data, symbol: response.config.params.symbol };
         });
-        responses.push(response1);
-        const response2 = await finnhub.get('/quote', {
-          params: {
-            symbol: 'MSFT',
-          },
-        });
-        responses.push(response2);
-        const response3 = await finnhub.get('/quote', {
-          params: {
-            symbol: 'AMZN',
-          },
-        });
-        responses.push(response3);
         if (isMounted) {
-          console.log(responses);
+          setStock(data);
         }
       } catch (error) {
         console.log(error);
