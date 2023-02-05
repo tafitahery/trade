@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
 import finnhub from '../api/finnhub';
+import { WatchListContext } from '../context/watchListContext';
 
 export default function StockList() {
   const [stock, setStock] = useState([]);
-  const [watchList, setWatchList] = useState(['GOOGL', 'MSFT', 'AMZN']);
+  const { watchList } = useContext(WatchListContext);
 
   const changeColor = (change) => {
     return change > 0 ? 'success' : 'danger';
